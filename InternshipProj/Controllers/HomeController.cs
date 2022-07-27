@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using DataLibrary.DataAccess;
 using DataLibrary.BusinessLogic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace InternshipProj.Controllers
 {
@@ -97,20 +98,54 @@ namespace InternshipProj.Controllers
                     client.EmailAddress = fields[3];
                     client.Birthday = Convert.ToDateTime(fields[4]);
 
-                    InsertClientIfNotExists(client.ClientId, client);
+                    if (FileIsValid(client))
+                    {
+                        InsertClientIfNotExists(client.ClientId, client);
+                    }
+                    else
+                    {
+                        return View();
+                    }
+
                 }
 
                 return RedirectToAction("ViewClients");
+
             }
+        }
+
+        public bool FileIsValid(ClientModel client)
+        {
+            if (string.IsNullOrEmpty(client.ClientId))
+            {
+                return false;
+            }
+            if (!string.IsNullOrEmpty(client.EmailAddress))
+            {
+                string emailRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                                         @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                                            @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+                Regex re = new Regex(emailRegex);
+                if (!re.IsMatch(client.EmailAddress))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            
+            return true;
         }
 
         public void InsertClientIfNotExists(string id, ClientModel client)
         {
-            if (SqlDataAccess.CountData(id) is false)
-            {
-                //klienti nuk ekziston
-                AddClient(client);
-            }
+                if (SqlDataAccess.CountData(id) is false)
+                {
+                    //klienti nuk ekziston -> shtohet ne sistem
+                    AddClient(client);
+                }
         }
     }
 }

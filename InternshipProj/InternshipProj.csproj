@@ -167,10 +167,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\AddClient.cshtml" />
     <Content Include="Views\Home\ViewClients.cshtml" />
-    <Content Include="Views\Home\ReadTxtFile.cshtml" />
     <Content Include="Views\Home\CheckForClient.cshtml" />
     <Content Include="Views\Upload\UploadFile.cshtml" />
     <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Home\ReadTxtFile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
